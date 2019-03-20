@@ -1,0 +1,21 @@
+{
+  "name" : "api_options",
+  "priority": 1,
+  "request" : {
+    "urlPattern" : "/api/.*",
+    "method" : "OPTIONS"
+  },
+  "response" : {
+    "status" : 200,
+    "headers" : {
+      "Access-Control-Allow-Origin" : "*",
+      "Access-Control-Allow-Methods" : "GET, HEAD, POST, DELETE, PUT, OPTIONS",
+      "Access-Control-Allow-Headers" : "Accept, Accept-Charset, Accept-Encoding, Accept-Language, Cache-Control, Cookie, Content-Type, Connection, Origin, Referer, Upgrade, User-Agent, Authorization, access_token, refresh_token, LNZ-Request-ID, pad-sso-token, X-Token_Ref",
+      "Access-Control-Max-Age" : "3600",
+      "Cache-Control" : "private, max-age=3600",
+      "Vary" : "Origin",
+      "Connection" : "Keep-Alive"
+    }
+  },
+  "persistent" : false
+}

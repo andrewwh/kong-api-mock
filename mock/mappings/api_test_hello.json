@@ -1,0 +1,19 @@
+{
+  "name" : "api_test_hello",
+  "request" : {
+    "url" : "/api/test/hello",
+    "method" : "GET"
+  },
+  "response" : {
+    "status" : 200,
+    "jsonBody" : {
+      "message": "Hello World!"
+    },
+    "headers" : {
+      "content-type" : "application/json; charset=utf-8",
+      "access-control-allow-origin": "*",
+      "Connection" : "keep-alive"
+    }
+  },
+  "persistent" : false
+}

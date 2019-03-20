@@ -1,0 +1,91 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+	<version>1.0-SNAPSHOT</version>
+	<groupId>nz.co.lotto</groupId>
+	<modelVersion>4.0.0</modelVersion>
+	<artifactId>mylotto-mock-api</artifactId>
+	<packaging>jar</packaging>
+	<name>mylotto-mock-api</name>
+
+	<properties>
+		<wiremock.port>8888</wiremock.port>
+		<wiremock.https-port>4443</wiremock.https-port>
+	</properties>
+
+	<profiles>
+		<profile>
+			<id>properties</id>
+			<activation>
+				<property>
+					<name>env.WIREMOCK_PORT</name>
+				</property>
+			</activation>
+			<properties>
+				<wiremock.port>${env.WIREMOCK_PORT}</wiremock.port>
+				<wiremock.https-port>${env.WIREMOCK_HTTPS_PORT}</wiremock.https-port>
+			</properties>
+		</profile>
+	</profiles>
+
+	<build>
+		<plugins>
+			<plugin>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.1</version>
+				<configuration>
+					<source>1.8</source>
+					<target>1.8</target>
+				</configuration>
+			</plugin>
+
+			<!-- run wiremock using mvn exec:java@wiremock -->
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>exec-maven-plugin</artifactId>
+				<version>1.2.1</version>
+				<executions>
+					<execution>
+						<id>help</id>
+						<goals>
+							<goal>java</goal>
+						</goals>
+						<configuration>
+							<arguments>
+								<argument>--help</argument>
+							</arguments>
+							<mainClass>com.github.tomakehurst.wiremock.standalone.WireMockServerRunner</mainClass>
+						</configuration>
+					</execution>
+					<execution>
+						<id>wiremock</id>
+						<goals>
+							<goal>java</goal>
+						</goals>
+						<configuration>
+							<arguments>
+								<argument>--port</argument>
+								<argument>${wiremock.port}</argument>
+							</arguments>
+							<mainClass>com.github.tomakehurst.wiremock.standalone.WireMockServerRunner</mainClass>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
+		</plugins>
+	</build>
+
+	<dependencies>
+		<dependency>
+			<groupId>com.github.tomakehurst</groupId>
+			<artifactId>wiremock-standalone</artifactId>
+			<version>2.22.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-simple</artifactId>
+			<version>1.7.12</version>
+		</dependency>
+	</dependencies>
+</project>

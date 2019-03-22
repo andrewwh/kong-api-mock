@@ -1,0 +1,21 @@
+{
+  "name": "kong-load",
+  "version": "1.0.0",
+  "description": "Load Kong API gateway configuration from files",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "kong"
+  ],
+  "author": "Andrew Wheeler",
+  "license": "MIT",
+  "dependencies": {
+    "commander": "^2.19.0",
+    "fs-plus": "^3.1.1",
+    "got": "^9.6.0",
+    "path": "^0.12.7"
+  },
+  "devDependencies": {}
+}

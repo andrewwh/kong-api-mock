@@ -1,18 +1,18 @@
 {
-  "name" : "api_test_hello",
+  "name" : "api_health_status",
   "request" : {
-    "url" : "/api/test/hello",
+    "url" : "/api/health/status",
     "method" : "GET"
   },
   "response" : {
     "status" : 200,
     "jsonBody" : {
-      "message": "Hello World!"
+      "status": "ok"
     },
     "headers" : {
       "content-type" : "application/json; charset=utf-8",
       "access-control-allow-origin": "*",
-      "Connection" : "keep-alive"
+      "connection" : "keep-alive"
     }
   },
   "persistent" : false

@@ -1,5 +1,7 @@
 FROM openjdk:8
 
+EXPOSE 8888
+
 ENV WIREMOCK_DIR=/usr/local/wiremock
 
 WORKDIR $WIREMOCK_DIR
@@ -19,5 +21,5 @@ COPY mappings/ ./mappings/
 COPY docker/docker-entrypoint.sh /
 RUN  chmod +x /docker-entrypoint.sh
 
-ENTRYPOINT ["/docker-entrypoint.sh"]   
+ENTRYPOINT ["/docker-entrypoint.sh"]
 CMD ["run"]

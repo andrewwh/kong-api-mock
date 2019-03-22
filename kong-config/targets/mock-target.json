@@ -1,0 +1,8 @@
+{
+    "upstream": {
+        "name": "mock-api",
+        "id": ""
+    },
+    "target": "mock-api.local:8888",
+    "weight": 100
+}

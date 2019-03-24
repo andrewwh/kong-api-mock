@@ -1,6 +1,6 @@
 {
     "upstream": {
-        "name": "mock-api",
+        "name": "mock-api.local",
         "id": ""
     },
     "target": "mock-api.local:8888",

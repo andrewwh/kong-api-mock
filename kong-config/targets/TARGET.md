@@ -7,6 +7,14 @@
 Create one or more target definitions where each target is contained within its own file:
 * Create a file name _target name_-target.json
 * Do not supply a guid id
+* Add the upstream name without an id or leave the id blank as below
+
+```json
+    "upstream": {
+        "name": "mock-api.local:8888",
+        "id": ""
+    }
+```
 
 ## Get a list of Targets per Upstream
 ```bash

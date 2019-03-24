@@ -1,5 +1,5 @@
 {
-    "name": "mock-api",
+    "name": "mock-api.local",
     "slots": 10000,
     "healthchecks": {
         "active": {

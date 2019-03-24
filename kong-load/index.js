@@ -50,6 +50,44 @@ function readConfigurationFiles(dir) {
         console.info(`Route directory ${routesDir} not found`)
     }
 
+    const upstreamsDir = path.join(dir, 'upstreams');
+    if (fs.isDirectorySync(upstreamsDir)) {
+        const upstreams = fs.listSync(upstreamsDir, ['json'])
+        upstreams.forEach(file => {
+            const upstream = JSON.parse(fs.readFileSync(file))
+
+            if (kong.upstreams[upstream.name]) {
+                console.error(`Found duplicate upstream ${upstream.name} in ${s}`)
+                return
+            }
+
+            kong.upstreams[upstream.name] = upstream
+
+            console.debug(`Loading upstream ${upstream.name}`)
+        });
+    } else {
+        console.info(`Upstreams directory ${upstreamsDir} not found`)
+    }    
+
+    const targetsDir = path.join(dir, 'targets');
+    if (fs.isDirectorySync(targetsDir)) {
+        const targets = fs.listSync(targetsDir, ['json'])
+        targets.forEach(file => {
+            const target = JSON.parse(fs.readFileSync(file))
+
+            if (kong.targets[target.name]) {
+                console.error(`Found duplicate target ${target.name} in ${s}`)
+                return
+            }
+
+            kong.targets[target.target] = target
+
+            console.debug(`Loading target ${target.target}`)
+        });
+    } else {
+        console.info(`Targets directory ${targetsDir} not found`)
+    }       
+
     return kong;
 }
 
@@ -77,10 +115,36 @@ async function applyServices(host, kong) {
     }
 }
 
+async function applyUpstreams(host, kong) {
+    for (const name of Object.keys(kong.upstreams)) {
+        const url = `${host}/upstreams/${name}`;
+
+        console.debug(`Executing upstream upsert PUT ${url}`)
+
+        try {
+            const response = await got.put(url, {
+                body: kong.upstreams[name],
+                json: true
+            })
+
+            console.debug(`Upstream ${name} created with id ${response.body.id}`)
+            kong.upstreams[name].id = response.body.id
+        } catch (ex) {
+            if (ex instanceof HttpError) {
+                console.error(`Error creating upstream ${ex.message} ${ex.body.message}`);
+            } else {
+                console.error(ex.message)
+            }
+        }
+    }
+}
+
 async function applyRoutes(host, kong) {
     for (const name of Object.keys(kong.routes)) {
         const route = kong.routes[name]
 
+        console.debug(`Applying route ${name}`)
+        
         if (!route.service && route.service.name == undefined) {
             console.error(`Cannot apply route ${name} without service name in service attribute`)
             return
@@ -112,7 +176,51 @@ async function applyRoutes(host, kong) {
             console.debug(`Route ${name} created with id ${response.body.id}`)
             kong.routes[name].id = response.body.id
         } catch (ex) {
-            if (ex instanceof HttpError) {
+            if (ex.hasOwnProperty('body')) {
+                console.error(`Error creating route ${ex.message} ${ex.body.message}`)
+            } else {
+                console.error(ex.message)
+            }
+        }
+    }
+}
+
+async function applyTargets(host, kong) {
+    for (const name of Object.keys(kong.targets)) {
+        const target = kong.targets[name]
+
+        if (!target.upstreams && target.upstream.name == undefined) {
+            console.error(`Cannot apply target ${name} without target name in upstreams attribute`)
+            return
+        }
+
+        const upstream = kong.upstreams[target.upstream.name]
+
+        if (upstream == undefined) {
+            console.error(`Cannot find upstream ${target.upstream.name} when applying target ${name}`)
+            return
+        }
+
+        if (!upstream.id) {
+            console.error(`Upstream ${target.upstream.name} does not have an id when applying target ${name}. Check the upstream has been created`)
+            return
+        }
+
+        target.upstream.id = upstream.id
+        const url = `${host}/upstreams/${target.upstream.id}/targets`;
+
+        console.debug(`Creating target POST ${url}`)
+
+        try {
+            const response = await got.post(url, {
+                body: target,
+                json: true
+            })
+
+            console.debug(`Target ${name} created with id ${response.body.id}`)
+            kong.targets[name].id = response.body.id
+        } catch (ex) {
+            if (ex.hasOwnProperty('body')) {
                 console.error(`Error creating route ${ex.message} ${ex.body.message}`)
             } else {
                 console.error(ex.message)
@@ -138,5 +246,12 @@ async function main(argv) {
 
     await applyServices(program.host, kong)
     await applyRoutes(program.host, kong)
+
+    /*
+    ** Do not have a use case for this yet
+    
+    await applyUpstreams(program.host, kong)
+    await applyTargets(program.host, kong)
+    */
 }
 main(process.argv)

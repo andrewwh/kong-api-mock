@@ -13,7 +13,7 @@ COPY ./kong-load/package-lock.json ./
 
 RUN npm install --production
 
-COPY ./kong-load/index.js ./
+COPY ./kong-load/*.js ./
 COPY ./kong-config ./kong-config
 
 COPY ./kong-load/docker/run-entrypoint.sh /docker-entrypoint.sh

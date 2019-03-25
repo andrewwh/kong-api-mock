@@ -35,6 +35,8 @@ services:
       - kong
     networks:
       - kong-net
+    environment:
+      - GW_ENVIRONMENT
   kong:
     image: "${KONG_DOCKER_TAG:-kong:latest}"
     container_name: kong-gw

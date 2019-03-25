@@ -6,7 +6,7 @@
 Create one or more route definitions where each route is contained within its own file:
 * Create a file name _route name_-route.json
 * Do not supply a guid id
-* Add the service name without an id or leave the id blank as below
+* Add the service name as below
 
 ```json
     "service": {
@@ -14,8 +14,6 @@ Create one or more route definitions where each route is contained within its ow
         "id": ""
     }
 ```
-
-_Note: This is a non-standard field name_
 
 ## Get a list of Routes
 ```bash

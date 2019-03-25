@@ -9,8 +9,9 @@ This project is a bundle of components running in a docker-compose context to en
 
 - [Background](#background)
 - [Setup](#setup)
-    - [Running](#running)
-    - [Load Kong configuration](#load-kong-configuration)
+- [Running Gateway with Compose](#running-gateway)
+- [Kong Configuration](#kong-configuration)
+- [Mock Server](#mock-server)
 - [As Built](AS-BUILT.md)
 - [Deploying](DEPLOY.md)
 - [License](#license)
@@ -26,7 +27,7 @@ As the gateway is bundled as a docker instance which is considered ephemeral it 
 A typical developer flow would be:
 1. Build all mock responses for services (happy and error path)
 2. Integate service into the front end application
-3. Develop real service
+3. Develop the real service
 4. Switch gateway to real service to perform end-to-end integration testing
 
 ## Setup
@@ -37,13 +38,17 @@ You will require the following installed to get started:
 * node
 * jq (useful)
 
-### Running Compose
+## Running Gateway
 Run locally with docker compose:
-```
+```bash
 docker-compose up --build
 ```
+or, for a specific environment
+```bash
+GW_ENVIRONMENT=test docker-compose up --build
+```
 
-#### Test
+### Test
 _Through the Gateway_
 
 ```
@@ -55,28 +60,8 @@ _Directly to the Mock Server_
 curl --silent http://localhost:8888/api/health/status | jq
 ```
 
-### Load Kong configuration
-The [kong-load](kong-load/index.js) application will load configuration stored in [kong-config](kong-config/README.md). The files are standard kong content types. Each one may be applied manually using curl. See [Config Help](kong-config/README.md) for how to use curl for each content type. Before you start you should also be familiar with the [Kong API documentation](https://docs.konghq.com/1.0.x/admin-api).
-
-The kong-load application is a nodejs (javascript) application. After running npm install in the [kong-load](kong-load) directory, execute the command from the root directory of this project:
-
-```bash
-kong-load/index.js --host kong host and port --config directory --environment name
-```
-
-| Option        | Description                                             | Default               |
-| ------------- |:-------------                                           | :-----                |
-| --host        | Http base url of the kong admin API                     | http://localhost:8001 |
-| --config      | Kong configuration file directory                       | kong-config           |
-| --environment | Environment specific files under each config type       | none                  |
-
-_Note: You need to have kong running locally or on a network reachable host_
-
-#### Environments
-In order to support the gateway in multiple environments, each kong content type such as kong-config/services may have the following files:
-
-1. Service files in the root of this directory which are always loaded (such as those that point to a mock server)
-2. A sub-directory named per environment with aditional files that are loaded using the --environment parameter. E.g. kong-config/services/test will contain services specific to the test environment.
+### Kong Configuration
+When running the gateway as a docker compose, the configuration is applied automatically using kong-load. The configuration can be reapplied manually at anytime to a running gateway. For more information see [Kong load guide](kong-load/README.md)
 
 
 ## Contributing

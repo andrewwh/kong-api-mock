@@ -1,0 +1,23 @@
+{
+    "name": "mock-all-api",
+    "protocols": [
+        "http"
+    ],
+    "methods": [
+        "GET"
+    ],
+    "hosts": [
+        "api.dev.mylotto.co.nz",
+        "api.test.mylotto.co.nz"
+    ],
+    "paths": [
+        "/api/.*"
+    ],
+    "regex_priority": 0,
+    "strip_path": false,
+    "preserve_host": true,
+    "service": {
+        "name": "mock-service",
+        "id": ""
+    }
+}

@@ -24,5 +24,5 @@ _Note: You need to have kong running locally or on a network reachable host_
 ### Environments
 In order to support the gateway in multiple environments, each kong content type such as _kong-config/services_ may have the following files:
 
-1. Files in the root of this directory which are always loaded (such as those that point to a mock server)
+1. Files in the root of this directory are always loaded (such as those that point to a mock server)
 2. A sub-directory named per environment with aditional files that are loaded using the --environment parameter. E.g. kong-config/services/test will contain services specific to the test environment.

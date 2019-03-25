@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 echo "Checking Kong gateway is available at ${KONG_HOST}"
 until curl --silent ${KONG_HOST}/services >/dev/null 2>&1 ; do
@@ -7,8 +7,8 @@ until curl --silent ${KONG_HOST}/services >/dev/null 2>&1 ; do
 done
 
 if [ "$1" = "run" ]; then
-    echo "Executing : node index.js --config $KONG_CONFIG_DIR --host $KONG_HOST"
-    node index.js --config $KONG_CONFIG_DIR --host $KONG_HOST
+    echo "Executing : node index.js --config $KONG_CONFIG_DIR --host $KONG_HOST $([[ ! -z "$GW_ENVIRONMENT" ]] && echo --environment $GW_ENVIRONMENT)"
+    node index.js --config $KONG_CONFIG_DIR --host $KONG_HOST $([[ ! -z "$GW_ENVIRONMENT" ]] && echo --environment $GW_ENVIRONMENT)
     exit
 fi
 

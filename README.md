@@ -1,8 +1,4 @@
-<h1 style="height: 350px; width: 300px; margin: auto">
-  <a style="background: transparent url(https://mylotto.co.nz/images/sprites/GlobalNav-logos-v2@2x.png) -15px -15px no-repeat;height:350px; width: 300px; position: absolute" href="https://mylotto.co.nz"></a>
-</h1>
-
-## Kong API with Mocks
+# Kong API Gateway with Mocks
 This project is a bundle of components running in a docker-compose context to enable a developer and tester to work with both mocks and real services through a single api gateway endpoint.
 
 ## Contents
@@ -20,12 +16,12 @@ This project is a bundle of components running in a docker-compose context to en
 ## Background
 Front end development is easier if it integrates with mock services that allow a developer, tester or user to explore all possible scenarios that are difficult to replicate in an integrated environment.
 
-The mock api gateway is a real [kong](https://konghq.com/) gateway that connects to the bundled mock service (wiremock) or alternatively a real downstream system.
+The mock api gateway is a real [kong](https://konghq.com/) gateway that connects to the bundled mock service (wiremock)or alternatively a real downstream system.
 
-As the gateway is bundled as a docker instance which is considered ephemeral it comes with a service to recreate all the services and routes from file. Of course, this could be productionised with beter care of the Kong datastore, but the objective is to redeploy the entire stack without this consideration as it makes continuous deployment easier. In addition, having the kong configuration committed to source code feels like a better practice.
+As the gateway is bundled as a docker instance which is considered ephemeral it comes with a service to recreate all the services and routes from files. Of course, this could be productionised with beter care of the Kong datastore, but the objective is to redeploy the entire stack without this consideration as it makes continuous deployment easier. In addition, having the kong configuration committed to source code is just a better practice.
 
 A typical developer flow would be:
-1. Build all mock responses for services (happy and error path)
+1. Build all mock requests and responses for services (happy and error path)
 2. Integate service into the front end application
 3. Develop the real service
 4. Switch gateway to real service to perform end-to-end integration testing
